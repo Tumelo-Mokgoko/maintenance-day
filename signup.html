@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sign Up — Maintenance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --blush:#FBE9EC;--rose:#E8A0B4;--rose-deep:#C9557A;--plum:#5B2A45;
+    --plum-soft:#7A3D5E;--cream:#FFF7F4;--gold:#C9A24B;--ink:#3A2230;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Manrope',sans-serif;color:var(--ink);min-height:100vh;
+    display:flex;align-items:center;justify-content:center;padding:20px;
+    background:
+      radial-gradient(800px 500px at 80% 10%,rgba(232,160,180,.4),transparent 60%),
+      radial-gradient(600px 400px at 10% 90%,rgba(201,162,75,.18),transparent 55%),
+      var(--cream);
+  }
+  .card{
+    background:#fff;border-radius:28px;padding:44px 38px;width:100%;max-width:420px;
+    box-shadow:0 24px 60px rgba(91,42,69,.16);border:1px solid rgba(232,160,180,.25);
+  }
+  .logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:8px;}
+  .logo-mark{width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--rose),var(--rose-deep));display:grid;place-items:center;color:#fff;font-family:'Fraunces',serif;box-shadow:0 4px 14px rgba(201,85,122,.4);}
+  .logo span{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:600;color:var(--plum);}
+  h1{font-family:'Fraunces',serif;font-size:1.7rem;color:var(--plum);text-align:center;margin:18px 0 4px;font-weight:600;}
+  .sub{text-align:center;color:var(--plum-soft);margin-bottom:28px;font-size:.95rem;}
+  label{display:block;font-weight:600;font-size:.88rem;color:var(--plum);margin:16px 0 6px;}
+  input{
+    width:100%;padding:13px 16px;border:1.5px solid rgba(201,85,122,.25);
+    border-radius:14px;font-family:'Manrope',sans-serif;font-size:1rem;outline:none;
+    transition:border .2s,box-shadow .2s;background:#fff;
+  }
+  input:focus{border-color:var(--rose-deep);box-shadow:0 0 0 3px rgba(232,160,180,.25);}
+  .hint{font-size:.78rem;color:var(--plum-soft);margin-top:6px;}
+  button{
+    width:100%;margin-top:24px;padding:14px;border:none;border-radius:100px;cursor:pointer;
+    font-family:'Manrope',sans-serif;font-weight:600;font-size:1rem;color:#fff;
+    background:linear-gradient(120deg,var(--rose-deep),var(--rose));
+    box-shadow:0 8px 22px rgba(201,85,122,.35);transition:transform .2s,box-shadow .2s;
+  }
+  button:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(201,85,122,.45);}
+  button:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+  #message{margin-top:18px;padding:14px;border-radius:14px;font-size:.9rem;text-align:center;display:none;}
+  #message.show{display:block;}
+  #message.success{background:rgba(72,187,120,.12);color:#2f855a;border:1px solid rgba(72,187,120,.3);}
+  #message.error{background:rgba(229,62,62,.1);color:#c53030;border:1px solid rgba(229,62,62,.3);}
+  .foot{text-align:center;margin-top:22px;font-size:.9rem;color:var(--plum-soft);}
+  .foot a{color:var(--rose-deep);font-weight:600;text-decoration:none;}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo"><span class="logo-mark">M</span><span>Maintenance</span></div>
+    <h1>Create your account</h1>
+    <p class="sub">Join the beauty exchange community 🌸</p>
+ 
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="you@example.com" autocomplete="email" />
+ 
+    <label for="password">Password</label>
+    <input id="password" type="password" placeholder="At least 6 characters" autocomplete="new-password" />
+    <div class="hint">Use at least 6 characters.</div>
+ 
+    <button id="signupBtn">Create Account</button>
+ 
+    <div id="message"></div>
+ 
+    <p class="foot">Already have an account? <a href="login.html">Log in</a></p>
+  </div>
+ 
+  <!-- Supabase library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ---- connect to your database ----
+    const SUPABASE_URL = "https://ebmzyizpnfxvtydhzdtp.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVibXp5aXpwbmZ4dnR5ZGh6ZHRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMTkzNDcsImV4cCI6MjA5MDY5NTM0N30.CJqHdmmDQm4NhnoJ1X2GxhhSQU3Kbnq7oj1G5fazyJ4";
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+ 
+    // ---- grab the page elements ----
+    const btn = document.getElementById("signupBtn");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const msg = document.getElementById("message");
+ 
+    function showMessage(text, type){
+      msg.textContent = text;
+      msg.className = "show " + type;
+    }
+ 
+    // ---- handle the button click ----
+    btn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+ 
+      // simple checks
+      if(!email){ showMessage("Please enter your email.", "error"); return; }
+      if(password.length < 6){ showMessage("Password must be at least 6 characters.", "error"); return; }
+ 
+      btn.disabled = true;
+      btn.textContent = "Creating your account...";
+ 
+      // ---- THE MAGIC: create the user in Supabase ----
+      const { data, error } = await db.auth.signUp({
+        email: email,
+        password: password
+      });
+ 
+      btn.disabled = false;
+      btn.textContent = "Create Account";
+ 
+      if(error){
+        showMessage("⚠️ " + error.message, "error");
+      } else {
+        showMessage("✅ Account created! Check your Supabase Users page — you should see yourself there now. 🎉", "success");
+        emailInput.value = "";
+        passwordInput.value = "";
+      }
+    });
+  </script>
+</body>
+</html>
+ 
