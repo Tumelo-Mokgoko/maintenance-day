@@ -347,6 +347,32 @@
   },{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ 
+<!-- 2. This line connects to YOUR database -->
+<script>
+  const SUPABASE_URL = "https://ebmzyizpnfxvtydhzdtp.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVibXp5aXpwbmZ4dnR5ZGh6ZHRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMTkzNDcsImV4cCI6MjA5MDY5NTM0N30.CJqHdmmDQm4NhnoJ1X2GxhhSQU3Kbnq7oj1G5fazyJ4";
+ 
+  // Create the connection
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+ 
+  // 3. TEST: prove the connection works.
+  // This just checks we can reach Supabase. It will log a
+  // friendly message to the browser console.
+  (async () => {
+    try {
+      const { error } = await supabaseClient.auth.getSession();
+      if (error) {
+        console.log("⚠️ Connected to Supabase, but got a message:", error.message);
+      } else {
+        console.log("✅ SUCCESS — your site is connected to Supabase!");
+      }
+    } catch (e) {
+      console.log("❌ Could not reach Supabase:", e.message);
+    }
+  })();
+</script>
 </body>
 </html>
  
